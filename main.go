@@ -13,7 +13,12 @@ import (
 	"time"
 )
 
+var msgs chan string
+
 func main() {
+	msgs = make(chan string, 255) //chan for printing incoming connections to prevent slowing down the service
+	go logger()
+
 	var p int //port to start the service
 
 	flag.IntVar(&p, "p", 11037, "Interface port to bind and listen")
@@ -56,12 +61,19 @@ func main() {
 }
 
 func handleRequest(conn net.Conn) {
-	fmt.Println("New incoming connection:", conn.RemoteAddr())
+	msgs <- "New incoming connection: " + conn.RemoteAddr().String()
 	b := make([]byte, 4)
 	now := time.Now().Unix() + 2208988800
 	binary.BigEndian.PutUint32(b, uint32(now))
 	conn.Write(b)
 	conn.Close()
+}
+
+func logger() {
+	for {
+		msg := <-msgs
+		fmt.Println(msg)
+	}
 }
 
 /*
