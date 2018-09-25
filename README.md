@@ -6,3 +6,10 @@ The program takes the following flags as parameters:
 -p Port for the server to listen on. Example: -p 11037
 The program logs all incoming requests to standard out
 As described in the RFC, the program should send the time as a 32-bit binary integer in network byte order
+
+# testing example
+printf "%d\n" "0x$(nc localhost 11037 | xxd -p)"
+3746856643
+printf "%d\n" "0x$(nc time.nist.gov 37 | xxd -p)"
+3746856649
+
