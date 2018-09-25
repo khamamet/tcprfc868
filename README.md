@@ -10,6 +10,7 @@ As described in the RFC, the program should send the time as a 32-bit binary int
 # testing example
 printf "%d\n" "0x$(nc localhost 11037 | xxd -p)"
 3746856643
+
 printf "%d\n" "0x$(nc time.nist.gov 37 | xxd -p)"
 3746856649
 
